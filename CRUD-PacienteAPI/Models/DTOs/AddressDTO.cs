@@ -16,7 +16,7 @@ namespace CRUD_PacienteAPI.Models.DTOs
         [JsonPropertyName("City")]
         public string City { get; set; }
 
-        [JsonPropertyName("Estate")]
-        public string Estate { get; set; }
+        [JsonPropertyName("State")]
+        public string State { get; set; }
     }
 }

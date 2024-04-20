@@ -50,14 +50,40 @@ namespace CRUD_PacienteAPI.Controllers
                 {
                     result = new { Success = false, Message = "Houve um erro no sistema, tente novamente mais tarde." };
 
-                    return StatusCode(400, result);
+                    return StatusCode(500, result);
                 }
             }
             catch(Exception ex) 
             {
                 await _repository.DisposeAsync();
 
-                result = new { Success = false, Error = ex.Message };
+                result = new { Success = false, Message = ex.Message };
+
+                return StatusCode(400, result);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPatients()
+        {
+            object result;
+
+            try
+            {
+                List<PatientDTO> patients = await _repository.GetPatients();
+
+                if (patients == null)
+                    throw new Exception("Não existe pacientes cadastrados na base de dados");
+                else
+                {
+                    result = new { Success = true, Result = patients };
+
+                    return StatusCode(200, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                result = new { Success = false, Message = ex.Message };
 
                 return StatusCode(400, result);
             }
