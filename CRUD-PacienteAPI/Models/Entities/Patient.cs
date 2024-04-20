@@ -2,17 +2,17 @@
 
 namespace CRUD_PacienteAPI.Models.Entities
 {
-    public class Patient
+    public class Patient : BaseEntity
     {
         public string Name { get; set; }
 
         public DateTime DateBirth { get; set; }
 
-        public long TaxNumber { get; set; }
+        public string TaxNumber { get; set; }
 
         public SexualGender SexualGender { get; set; }
 
-        public Address Address { get; set; }
+        public Address? Address { get; set; }
 
         public PatientStatus Status { get; set; }
     }
