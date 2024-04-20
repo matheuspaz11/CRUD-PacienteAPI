@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<PatientRepository>();
 
 builder.Services.AddDbContext<PatientContext>(options =>
 {

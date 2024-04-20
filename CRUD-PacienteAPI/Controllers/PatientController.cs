@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CRUD_PacienteAPI.Models.DTOs;
 using CRUD_PacienteAPI.Models.Entities;
-using CRUD_PacienteAPI.Repository.Interfaces;
+using CRUD_PacienteAPI.Repository;
 using CRUD_PacienteAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +13,13 @@ namespace CRUD_PacienteAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly PatientService _patientService;
-        private readonly IBaseRepository _patientRepository;
+        private readonly PatientRepository _repository;
 
-        public PatientController(IMapper mapper, PatientService patientService, IBaseRepository patientRepository)
+        public PatientController(IMapper mapper, PatientService patientService, PatientRepository repository)
         {
             _mapper = mapper;
             _patientService = patientService;
-            _patientRepository = patientRepository;
+            _repository = repository;
         }
 
         [HttpPost]
@@ -31,11 +31,16 @@ namespace CRUD_PacienteAPI.Controllers
             {
                 _patientService.ValidatePatient(patientDTO);
 
-                Patient patient = _mapper.Map<Patient>(patientDTO);    
+                Patient patientExists = await _repository.GetPatientByTaxNumber(patientDTO.TaxNumber);
 
-                _patientRepository.Add(patient);
+                if (patientExists != null)
+                    throw new Exception("TaxNumber já cadastrado na base de dados");
 
-                if (await _patientRepository.SaveChangesAsync())
+                Patient patient = _mapper.Map<Patient>(patientDTO);
+
+                _repository.Add(patient);
+
+                if (await _repository.SaveChangesAsync())
                 {
                     result = new { Success = true, Message = "Paciente salvo com sucesso!" };
 
@@ -50,7 +55,7 @@ namespace CRUD_PacienteAPI.Controllers
             }
             catch(Exception ex) 
             {
-                await _patientRepository.DisposeAsync();
+                await _repository.DisposeAsync();
 
                 result = new { Success = false, Error = ex.Message };
 
