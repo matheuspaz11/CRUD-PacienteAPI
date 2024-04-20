@@ -20,9 +20,14 @@ namespace CRUD_PacienteAPI.Repository
             return await _context.Patients.Where(x => x.TaxNumber == taxNumber).FirstOrDefaultAsync();
         }
 
-        public async Task<List<PatientDTO>> GetPatients()
+        public async Task<IEnumerable<PatientDTO>> GetPatients(string? name)
         {
-            var patients = await _context.Patients.Include(p => p.Address).ToListAsync();
+            List<Patient> patients;
+
+            if (string.IsNullOrEmpty(name))
+                patients = await _context.Patients.Include(p => p.Address).ToListAsync();
+            else
+                patients = await _context.Patients.Include(p => p.Address).Where(p => p.Name.Contains(name)).ToListAsync();
 
             var patientDTOs = patients.Select(p => new PatientDTO
             {

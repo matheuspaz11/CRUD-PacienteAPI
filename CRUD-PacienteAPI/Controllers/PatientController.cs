@@ -22,7 +22,7 @@ namespace CRUD_PacienteAPI.Controllers
             _repository = repository;
         }
 
-        [HttpPost]
+        [HttpPost("CreatePatient")]
         public async Task<IActionResult> CreatePatient(PatientDTO patientDTO)
         {
             object result;
@@ -63,17 +63,17 @@ namespace CRUD_PacienteAPI.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPatients()
+        [HttpGet("GetPatient/{name?}")]
+        public async Task<IActionResult> GetPatients(string? name)
         {
             object result;
 
             try
             {
-                List<PatientDTO> patients = await _repository.GetPatients();
+                var patients = await _repository.GetPatients(name);
 
-                if (patients == null)
-                    throw new Exception("Não existe pacientes cadastrados na base de dados");
+                if (!patients.Any())
+                    throw new Exception("Paciente(s) não encontrado(s) na base de dados");
                 else
                 {
                     result = new { Success = true, Result = patients };
