@@ -8,6 +8,8 @@ namespace CRUD_PacienteAPI.Services
     {   
         public void ValidatePatient(PatientDTO patientDTO)
         {
+            patientDTO.TaxNumber = patientDTO.TaxNumber.Replace(".", "").Replace("-", "");
+
             bool validateCpf = ValidateCPF.IsValidCPF(patientDTO.TaxNumber);
 
             if(!validateCpf)

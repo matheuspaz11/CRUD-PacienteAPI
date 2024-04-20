@@ -17,6 +17,9 @@ namespace CRUD_PacienteAPI.Maps
             builder.Property(x => x.HouseNumber).IsRequired();
             builder.Property(x => x.City).HasColumnType("varchar(30)").IsRequired();
             builder.Property(x => x.Estate).HasColumnType("varchar(2)").IsRequired();
+
+            builder.Property(x => x.PatientId).HasColumnName("id_patient").IsRequired();
+            builder.HasOne(x => x.Patient).WithOne(x => x.Address).HasForeignKey<Address>(x => x. PatientId);
         }
     }
 }

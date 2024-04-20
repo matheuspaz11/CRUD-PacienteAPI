@@ -4,8 +4,6 @@
     {
         public static bool IsValidCPF(string cpf)
         {
-            cpf = cpf.Replace(".", "").Replace("-", "");
-
             if (cpf.Length != 11 || !IsNumeric(cpf))
             {
                 return false;

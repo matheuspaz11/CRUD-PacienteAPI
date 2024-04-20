@@ -16,7 +16,6 @@ namespace CRUD_PacienteAPI.Maps
             builder.Property(x => x.DateBirth).IsRequired();
             builder.Property(x => x.TaxNumber).HasColumnType("varchar(11)").IsRequired();
             builder.Property(x => x.SexualGender).IsRequired();
-            builder.Property(x => x.Address).HasColumnName("id_address");
             builder.Property(x => x.Status).IsRequired();
         }
     }

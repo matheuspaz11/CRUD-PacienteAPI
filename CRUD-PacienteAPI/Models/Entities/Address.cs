@@ -11,5 +11,9 @@
         public string City { get; set; }
 
         public string Estate { get; set; }
+
+        public int PatientId { get; set; }
+
+        public Patient Patient { get; set; }
     }
 }
