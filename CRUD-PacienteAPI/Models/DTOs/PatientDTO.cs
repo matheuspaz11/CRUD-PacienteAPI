@@ -12,8 +12,9 @@ namespace CRUD_PacienteAPI.Models.DTOs
         public string Name { get; set; }
 
         [Required(ErrorMessage = "O campo DateBirth é obrigatório")]
+        [ValidateDate]
         [JsonPropertyName("DateBirth")]
-        public DateTime DateBirth { get; set; }
+        public string DateBirth { get; set; }
 
         [Required(ErrorMessage = "O campo TaxNumber é obrigatório")]
         [JsonPropertyName("TaxNumber")]
