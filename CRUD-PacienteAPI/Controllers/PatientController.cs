@@ -30,12 +30,7 @@ namespace CRUD_PacienteAPI.Controllers
 
             try
             {
-                _patientService.ValidatePatient(patientDTO);
-
-                Patient patientExists = await _repository.GetPatientByTaxNumber(patientDTO.TaxNumber);
-
-                if (patientExists != null)
-                    throw new Exception("TaxNumber já cadastrado na base de dados");
+                await _patientService.ValidatePatient(patientDTO, _repository);
 
                 Patient patient = _mapper.Map<Patient>(patientDTO);
 
@@ -137,7 +132,7 @@ namespace CRUD_PacienteAPI.Controllers
 
                 _patientService.PatientExists(patient);
 
-                _patientService.ValidateUpdatePatient(updatedPatientDTO);
+                await _patientService.ValidateUpdatePatient(updatedPatientDTO, _repository);
 
                 Patient updatePatient = _mapper.Map(updatedPatientDTO, patient);
 

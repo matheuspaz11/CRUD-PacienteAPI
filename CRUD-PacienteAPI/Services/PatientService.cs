@@ -1,17 +1,23 @@
 ﻿using CRUD_PacienteAPI.Helpers.Validators;
 using CRUD_PacienteAPI.Models.DTOs;
 using CRUD_PacienteAPI.Models.Entities;
+using CRUD_PacienteAPI.Repository;
 using static CRUD_PacienteAPI.Models.Enums.Enum;
 
 namespace CRUD_PacienteAPI.Services
 {
     public class PatientService
     {   
-        public void ValidatePatient(PatientDTO patient)
+        public async Task ValidatePatient(PatientDTO patient, PatientRepository repository)
         {
             patient.TaxNumber = patient.TaxNumber.Replace(".", "").Replace("-", "");
 
-            ValidateTaxNumber(patient.TaxNumber);
+            Patient patientExists = await repository.GetPatientByTaxNumber(patient.TaxNumber);
+
+            if (patientExists != null)
+                throw new Exception("TaxNumber já cadastrado na base de dados");
+            else
+                ValidateTaxNumber(patient.TaxNumber);
 
             ValidateSexualGender(patient.SexualGender);
 
@@ -26,10 +32,19 @@ namespace CRUD_PacienteAPI.Services
                 throw new Exception("Paciente já se encontra como inativado");
         }
 
-        public void ValidateUpdatePatient(UpdatePatientDTO updatePatientDTO)
+        public async Task ValidateUpdatePatient(UpdatePatientDTO updatePatientDTO, PatientRepository repository)
         {
-            if(updatePatientDTO.TaxNumber != null)
-                ValidateTaxNumber(updatePatientDTO.TaxNumber);
+            if (updatePatientDTO.TaxNumber != null)
+            {
+                updatePatientDTO.TaxNumber = updatePatientDTO.TaxNumber.Replace(".", "").Replace("-", "");
+
+                Patient patientExists = await repository.GetPatientByTaxNumber(updatePatientDTO.TaxNumber);
+
+                if (patientExists != null)
+                    throw new Exception("TaxNumber já cadastrado na base de dados");
+                else
+                    ValidateTaxNumber(updatePatientDTO.TaxNumber);
+            }
 
             if (updatePatientDTO.SexualGender != null)
                 ValidateSexualGender(updatePatientDTO.SexualGender);

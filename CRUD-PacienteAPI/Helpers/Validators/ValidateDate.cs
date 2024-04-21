@@ -11,11 +11,9 @@ namespace CRUD_PacienteAPI.Helpers.Validators
                 string[] format = { "dd-MM-yyyy" };
 
                 if (DateTime.TryParseExact(value.ToString(), format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime date))
-                {
                     return ValidationResult.Success;
-                }
-
-                return new ValidationResult("O campo DateBirth não está no padrão correto.");
+                else
+                    return new ValidationResult("O campo DateBirth não está no padrão correto.");
             }else
                 return ValidationResult.Success;
         }
