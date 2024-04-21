@@ -6,17 +6,18 @@ namespace CRUD_PacienteAPI.Helpers.Validators
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            string[] validDate = { "yyyy-MM-dd", "dd-MM-yyyy" };
-
-            foreach (string format in validDate)
+            if(value != null)
             {
+                string[] format = { "dd-MM-yyyy" };
+
                 if (DateTime.TryParseExact(value.ToString(), format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime date))
                 {
                     return ValidationResult.Success;
                 }
-            }
 
-            return new ValidationResult("O campo DateBirth não está no padrão correto.");
+                return new ValidationResult("O campo DateBirth não está no padrão correto.");
+            }else
+                return ValidationResult.Success;
         }
     }
 }

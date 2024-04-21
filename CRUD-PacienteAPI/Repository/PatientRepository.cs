@@ -32,7 +32,7 @@ namespace CRUD_PacienteAPI.Repository
             var patientDTOs = patients.Select(p => new PatientDTO
             {
                 Name = p.Name,
-                DateBirth = p.DateBirth.ToString("dd-MM-yyyy"),
+                DateBirth = p.DateBirth,
                 TaxNumber = p.TaxNumber,
                 SexualGender = (int)p.SexualGender,
                 Address = p.Address == null ? null : new AddressDTO

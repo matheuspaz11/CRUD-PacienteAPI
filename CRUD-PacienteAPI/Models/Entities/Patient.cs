@@ -6,7 +6,7 @@ namespace CRUD_PacienteAPI.Models.Entities
     {
         public string Name { get; set; }
 
-        public DateTime DateBirth { get; set; }
+        public string DateBirth { get; set; }
 
         public string TaxNumber { get; set; }
 

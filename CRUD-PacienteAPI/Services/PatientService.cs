@@ -7,33 +7,65 @@ namespace CRUD_PacienteAPI.Services
 {
     public class PatientService
     {   
-        public void ValidatePatient(PatientDTO patientDTO)
+        public void ValidatePatient(PatientDTO patient)
         {
-            patientDTO.TaxNumber = patientDTO.TaxNumber.Replace(".", "").Replace("-", "");
+            patient.TaxNumber = patient.TaxNumber.Replace(".", "").Replace("-", "");
 
-            bool validateCpf = ValidateCPF.IsValidCPF(patientDTO.TaxNumber);
+            ValidateTaxNumber(patient.TaxNumber);
 
-            if(!validateCpf)
-                throw new Exception("TaxNumber inválido, forneça um TaxNumber válido");
+            ValidateSexualGender(patient.SexualGender);
 
-            bool validateSexualGender = Enum.IsDefined(typeof(SexualGender), patientDTO.SexualGender);
-
-            if(!validateSexualGender)
-                throw new Exception("SexualGender inválido, forneça um SexualGender válido");
-
-            bool validateStatus = Enum.IsDefined(typeof(PatientStatus), patientDTO.Status);
-
-            if (!validateStatus)
-                throw new Exception("Status inválido, forneça um Status válido");
+            ValidateStatus(patient.Status);
         }
 
         public void ValidateActivePatient(Patient patient)
         {
-            if (patient == null)
-                throw new Exception("Paciente não encontrado na base de dados");
+            PatientExists(patient);
 
             if (patient.Status == PatientStatus.Inactive)
                 throw new Exception("Paciente já se encontra como inativado");
+        }
+
+        public void ValidateUpdatePatient(UpdatePatientDTO updatePatientDTO)
+        {
+            if(updatePatientDTO.TaxNumber != null)
+                ValidateTaxNumber(updatePatientDTO.TaxNumber);
+
+            if (updatePatientDTO.SexualGender != null)
+                ValidateSexualGender(updatePatientDTO.SexualGender);
+
+            if (updatePatientDTO.Status != null)
+                ValidateStatus(updatePatientDTO.Status);
+        }
+
+        public void PatientExists(Patient patient)
+        {
+            if (patient == null)
+                throw new Exception("Paciente não encontrado na base de dados");
+        }
+
+        public void ValidateTaxNumber(string taxNumber)
+        {
+            bool validateCpf = ValidateCPF.IsValidCPF(taxNumber);
+
+            if (!validateCpf)
+                throw new Exception("TaxNumber inválido, forneça um TaxNumber válido");
+        }
+
+        public void ValidateSexualGender(int? patientSexualGender)
+        {
+            bool validateSexualGender = Enum.IsDefined(typeof(SexualGender), patientSexualGender);
+
+            if (!validateSexualGender)
+                throw new Exception("SexualGender inválido, forneça um SexualGender válido");
+        }
+
+        public void ValidateStatus(int? patientStatus)
+        {
+            bool validateStatus = Enum.IsDefined(typeof(PatientStatus), patientStatus);
+
+            if (!validateStatus)
+                throw new Exception("Status inválido, forneça um Status válido");
         }
     }
 }

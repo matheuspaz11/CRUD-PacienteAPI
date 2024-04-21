@@ -13,7 +13,7 @@ namespace CRUD_PacienteAPI.Maps
             base.Configure(builder);
 
             builder.Property(x => x.Name).HasColumnType("varchar(100)").IsRequired();
-            builder.Property(x => x.DateBirth).IsRequired();
+            builder.Property(x => x.DateBirth).HasColumnType("varchar(10)").IsRequired();
             builder.Property(x => x.TaxNumber).HasColumnType("varchar(11)").IsRequired();
             builder.Property(x => x.SexualGender).IsRequired();
             builder.Property(x => x.Status).IsRequired();

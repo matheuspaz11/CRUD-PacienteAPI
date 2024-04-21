@@ -125,5 +125,78 @@ namespace CRUD_PacienteAPI.Controllers
                 return StatusCode(400, result);
             }
         }
+
+        [HttpPut("UpdatePatient/{id}")]
+        public async Task<IActionResult> UpdatePatient(int id, UpdatePatientDTO updatedPatientDTO)
+        {
+            object result;
+
+            try
+            {
+                Patient patient = await _repository.GetPatientById(id);
+
+                _patientService.PatientExists(patient);
+
+                _patientService.ValidateUpdatePatient(updatedPatientDTO);
+
+                Patient updatePatient = _mapper.Map(updatedPatientDTO, patient);
+
+                _repository.Update(updatePatient);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    result = new { Success = true, Message = "Paciente atualizado com sucesso!", Object = updatePatient };
+
+                    return StatusCode(200, result);
+                }
+                else
+                {
+                    result = new { Success = false, Message = "Houve um erro no sistema, tente novamente mais tarde." };
+
+                    return StatusCode(500, result);
+                }
+            }
+            catch(Exception ex)
+            {
+                result = new { Success = false, Message = ex.Message };
+
+                return StatusCode(400, result);
+            }
+        }
+
+        [HttpDelete("DeletePatient/{id}")]
+        public async Task<IActionResult> DeletePatient(int id)
+        {
+            object result;
+
+            try
+            {
+                Patient patient = await _repository.GetPatientById(id);
+
+                if (patient == null)
+                    throw new Exception("Paciente não encontrado na base de dados");
+                else
+                    _repository.Delete(patient);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    result = new { Success = true, Message = "Paciente deletado com sucesso!" };
+
+                    return StatusCode(200, result);
+                }
+                else
+                {
+                    result = new { Success = false, Message = "Houve um erro no sistema, tente novamente mais tarde." };
+
+                    return StatusCode(500, result);
+                }
+            }
+            catch(Exception ex)
+            {
+                result = new { Success = false, Message = ex.Message };
+
+                return StatusCode(400, result);
+            }
+        }
     }
 }
