@@ -34,6 +34,11 @@ namespace CRUD_PacienteAPI.Services
 
         public async Task ValidateUpdatePatient(UpdatePatientDTO updatePatientDTO, PatientRepository repository)
         {
+            bool nullFields = CheckNullFields(updatePatientDTO);
+
+            if (nullFields)
+                throw new Exception("É necessário passar pelo menos um dos campos para atualizar o paciente");
+
             if (updatePatientDTO.TaxNumber != null)
             {
                 updatePatientDTO.TaxNumber = updatePatientDTO.TaxNumber.Replace(".", "").Replace("-", "");
@@ -81,6 +86,19 @@ namespace CRUD_PacienteAPI.Services
 
             if (!validateStatus)
                 throw new Exception("Status inválido, forneça um Status válido");
+        }
+
+        public bool CheckNullFields(object obj)
+        {
+            var properties = obj.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                if (property.GetValue(obj) != null)
+                    return false;
+            }
+
+            return true;
         }
     }
 }

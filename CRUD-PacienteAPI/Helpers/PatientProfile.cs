@@ -12,7 +12,20 @@ namespace CRUD_PacienteAPI.Helpers
             CreateMap<Patient, PatientDTO>();
             CreateMap<Address, AddressDTO>();
             CreateMap<AddressDTO, Address>();
-            CreateMap<UpdatePatientDTO, Patient>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<UpdatePatientDTO, Patient>().ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember, context) => {
+                if (srcMember != null)
+                {
+                    if (srcMember is Enum && (src.SexualGender == (int)dest.SexualGender))
+                        return false;
+
+                    if (srcMember is Enum && (src.Status == (int)dest.Status))
+                        return false;
+
+                    return true;
+                }
+
+                return false;
+            }));
         }
     }
 }
