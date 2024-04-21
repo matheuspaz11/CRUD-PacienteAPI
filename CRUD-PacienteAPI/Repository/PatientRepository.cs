@@ -48,5 +48,10 @@ namespace CRUD_PacienteAPI.Repository
 
             return patientDTOs;
         }
+
+        public async Task<Patient> GetPatientById(int id)
+        {
+            return await _context.Patients.Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
     }
 }

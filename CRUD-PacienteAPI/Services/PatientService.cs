@@ -1,5 +1,6 @@
 ﻿using CRUD_PacienteAPI.Helpers.Validators;
 using CRUD_PacienteAPI.Models.DTOs;
+using CRUD_PacienteAPI.Models.Entities;
 using static CRUD_PacienteAPI.Models.Enums.Enum;
 
 namespace CRUD_PacienteAPI.Services
@@ -24,6 +25,15 @@ namespace CRUD_PacienteAPI.Services
 
             if (!validateStatus)
                 throw new Exception("Status inválido, forneça um Status válido");
+        }
+
+        public void ValidateActivePatient(Patient patient)
+        {
+            if (patient == null)
+                throw new Exception("Paciente não encontrado na base de dados");
+
+            if (patient.Status == PatientStatus.Inactive)
+                throw new Exception("Paciente já se encontra como inativado");
         }
     }
 }

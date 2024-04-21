@@ -8,5 +8,7 @@ namespace CRUD_PacienteAPI.Repository.Interfaces
         Task<Patient> GetPatientByTaxNumber(string taxNumber);
 
         Task<IEnumerable<PatientDTO>> GetPatients(string? name);
+
+        Task<Patient> GetPatientById(int id);
     }
 }
