@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRUD_PacienteAPI.Models.DTOs;
 using CRUD_PacienteAPI.Models.Entities;
+using static CRUD_PacienteAPI.Models.Enums.Enum;
 
 namespace CRUD_PacienteAPI.Helpers
 {
@@ -15,10 +16,12 @@ namespace CRUD_PacienteAPI.Helpers
             CreateMap<UpdatePatientDTO, Patient>().ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember, context) => {
                 if (srcMember != null)
                 {
-                    if (srcMember is Enum && (src.SexualGender == (int)dest.SexualGender))
+                    var enumType = srcMember.GetType();
+
+                    if (enumType == typeof(SexualGender) && (src.SexualGender != (int)srcMember))
                         return false;
 
-                    if (srcMember is Enum && (src.Status == (int)dest.Status))
+                    if (enumType == typeof(PatientStatus) && (src.Status != (int)srcMember))
                         return false;
 
                     return true;
